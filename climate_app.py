@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from sqlalchemy import inspect
 
-engine = create_engine("sqlite:///./Resources/hawaii.sqlite")
+engine = create_engine("sqlite:///./Resources/hawaii.sqlite", connect_args={'check_same_thread': False})
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
@@ -18,6 +18,7 @@ Base.prepare(engine, reflect=True)
 # Save references to each table
 Measurement = Base.classes.measurement
 Station = Base.classes.station
+session = Session(engine)
 
 app = Flask(__name__) # the name of the file & the object (double usage)
 
@@ -39,7 +40,7 @@ def home():
 @app.route('/api/v1.0/precipitation/')
 def precipitation():
     print("In Precipitation section.")
-    session = Session(engine)
+    
     last_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first().date
     last_year = dt.datetime.strptime(last_date, '%Y-%m-%d') - dt.timedelta(days=365)
 
@@ -56,7 +57,7 @@ def precipitation():
 @app.route('/api/v1.0/stations/')
 def stations():
     print("In station section.")
-    session = Session(engine)
+    
     station_list = session.query(Station.station)\
     .order_by(Station.station).all() 
     print()
@@ -70,7 +71,7 @@ def stations():
 @app.route('/api/v1.0/tobs/')
 def tobs():
     print("In TOBS section.")
-    session = Session(engine)
+    
     last_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first().date
     last_year = dt.datetime.strptime(last_date, '%Y-%m-%d') - dt.timedelta(days=365)
 
@@ -88,7 +89,7 @@ def tobs():
 def calc_temps_start(start_date):
     print("In start date section.")
     print(start_date)
-    session = Session(engine)
+    
     select = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
     result_temp = session.query(*select).\
         filter(Measurement.date >= start_date).all()
@@ -102,7 +103,7 @@ def calc_temps_start(start_date):
 @app.route('/api/v1.0/<start_date>/<end_date>/')
 def calc_temps_start_end(start_date, end_date):
     print("In start & end date section.")
-    session = Session(engine)
+    
     select = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
     result_temp = session.query(*select).\
         filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
