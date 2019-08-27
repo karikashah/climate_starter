@@ -27,6 +27,6 @@ For this project there are 2 steps:
         /api/v1.0/precipitation <br>
         /api/v1.0/stations <br>
         /api/v1.0/tobs <br>
-        /api/v1.0/<start> <br>
-        /api/v1.0/<start>/<end> <br>
+        /api/v1.0/`<start>` <br>
+        /api/v1.0/`<start>`/`<end>` <br>
    b. You can view the **source code** at **<em>climate_app.py</em>**
