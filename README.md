@@ -23,10 +23,12 @@ For this project there are 2 steps:
  2. ## Climate app
    Use of Flask & SQLAlchemy to create different routes for the above generated graphs. <br>
    a. Following routes were created:<br>
+      ```
       / 
       /api/v1.0/precipitation 
       /api/v1.0/stations
       /api/v1.0/tobs
       /api/v1.0/<start>
       /api/v1.0/<start>/<end>
+      ```
    b. You can view the **source code** at **<em>climate_app.py</em>**
